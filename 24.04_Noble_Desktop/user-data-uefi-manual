@@ -31,7 +31,7 @@ autoinstall:
       - id: sda-efi
         type: partition
         device: disk-sda
-        size: 512M
+        size: 1G
         flag: boot
       - id: sda-lvm
         type: partition
