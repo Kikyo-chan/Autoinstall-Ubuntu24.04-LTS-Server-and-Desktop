@@ -36,6 +36,15 @@ You can also view the installation log during the whole automated installation p
  All operations and installation tests here require the host to be set to UEFI mode, the traditional BIOS mode is outdated and I don't want to look into it.
 So, please do it in UEFI mode.
 
+## 2026-04 Stability updates
+- Added required NoCloud `meta-data` content (`instance-id` and `local-hostname`) for both server and desktop profiles.
+- Escaped `;` in PXE `ds=nocloud-net\;s=...` kernel args to avoid parser truncation in GRUB-style chains.
+- Removed duplicate `refresh-installer` key in `24.04_live_server/user-data` and set installer refresh to deterministic mode (`update: false`).
+- Added UEFI-friendly storage setting `grub.reorder_uefi: false` in default profiles.
+- Added an explicit UEFI+GPT+LVM sample profile for Issue #3:
+  - `24.04_live_server/user-data-uefi-manual`
+  - `24.04_Noble_Desktop/user-data-uefi-manual`
+
 
 ## Ubuntu24.04 LTS Desktop Autoinstall (user-data):
 ```yaml
@@ -219,7 +228,7 @@ autoinstall:
   ### PXE&iPXE BOOT Config
   1. Ubuntu24.04 LTS Desktop PXE&iPXE BOOT Config
      ```yaml
-     set base-url http://172.17.100.221/iso/ubuntu/24.04_desktop/noble-desktop
+     set base-url http://172.17.100.221/iso/ubuntu/24.04_desktop/24.04_Noble_Desktop
      kernel ${base-url}/casper/vmlinuz
      initrd ${base-url}/casper/initrd
      set ubuntu_iso_url ${base-url}/noble-desktop-amd64.iso
@@ -249,7 +258,7 @@ autoinstall:
   3. 24.04_live_server Preview of system files and directories at deployment：
       ![image](https://github.com/user-attachments/assets/53763127-7a58-4f45-9f17-fe9ef858e5b6)
      
-  4. 24.04_live_noble-desktop Preview of system files and directories at deployment：
+   4. 24.04_Noble_Desktop Preview of system files and directories at deployment：
      ![image](https://github.com/user-attachments/assets/07e5a623-8418-42ea-a26b-a53be429da25)
 
   5. ........

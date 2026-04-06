@@ -1,0 +1,61 @@
+#cloud-config
+autoinstall:
+  version: 1
+  refresh-installer:
+    update: false
+  identity:
+    realname: ''
+    hostname: ubuntu
+    username: ubuntu
+    password: '$6$jMIpAD1dGkm6sqfJ$HF6uWZp3lbYMjyI3jWUE1j51R9sqCkX8tjrp3xut2AWs3r2Ou9JGyZu1Xr7D3VF3B4X2gYCfjQatKoxAbDGSu0'
+  locale: en_US.UTF-8
+  keyboard:
+    layout: us
+    variant: ''
+  timezone: Asia/Shanghai
+  storage:
+    grub:
+      reorder_uefi: false
+    swap:
+      size: 0
+    config:
+      - id: disk-sda
+        type: disk
+        ptable: gpt
+        path: /dev/sda
+        wipe: superblock-recursive
+        grub_device: true
+      - id: sda-efi
+        type: partition
+        device: disk-sda
+        size: 512M
+        flag: boot
+      - id: sda-lvm
+        type: partition
+        device: disk-sda
+        size: -1
+      - id: vg0
+        type: lvm_volgroup
+        name: vg0
+        devices: [sda-lvm]
+      - id: lv-root
+        type: lvm_partition
+        volgroup: vg0
+        name: root
+        size: -1
+      - id: fs-efi
+        type: format
+        fstype: fat32
+        volume: sda-efi
+      - id: fs-root
+        type: format
+        fstype: ext4
+        volume: lv-root
+      - id: mnt-efi
+        type: mount
+        path: /boot/efi
+        device: fs-efi
+      - id: mnt-root
+        type: mount
+        path: /
+        device: fs-root

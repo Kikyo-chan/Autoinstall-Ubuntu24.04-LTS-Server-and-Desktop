@@ -1,1 +1,2 @@
-
+instance-id: iid-ubuntu2404-server
+local-hostname: ubuntu-server

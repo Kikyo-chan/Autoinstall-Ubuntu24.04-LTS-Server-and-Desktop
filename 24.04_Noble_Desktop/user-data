@@ -3,8 +3,7 @@
 # https://canonical-subiquity.readthedocs-hosted.com/en/latest/reference/autoinstall-reference.html
 autoinstall:
   refresh-installer:
-    update: true
-    channel: latest/edge
+    update: false
   apt:
     disable_components: []
     fallback: abort
@@ -62,6 +61,8 @@ autoinstall:
 #    authorized-keys: []
 #    install-server: true
   storage:
+    grub:
+      reorder_uefi: false
     layout:
       name: lvm
       sizing-policy: all
@@ -78,6 +79,5 @@ autoinstall:
 #    - curtin in-target --target /target -- apt-get dist-upgrade -y
 #    - curtin in-target --target /target -- apt autoremove -y
 #    - chmod -R 600 /target/etc/netplan/
-    - curtin in-target --target=/target -- sudo usermod -p '$6$jMIpAD1dGkm6sqfJ$HF6uWZp3lbYMjyI3jWUE1j51R9sqCkX8tjrp3xut2AWs3r2Ou9JGyZu1Xr7D3VF3B4X2gYCfjQatKoxAbDGSu0' root
-    - reboot
+    - curtin in-target --target=/target -- usermod -p '$6$jMIpAD1dGkm6sqfJ$HF6uWZp3lbYMjyI3jWUE1j51R9sqCkX8tjrp3xut2AWs3r2Ou9JGyZu1Xr7D3VF3B4X2gYCfjQatKoxAbDGSu0' root
   version: 1

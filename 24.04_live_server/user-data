@@ -1,11 +1,10 @@
 #cloud-config
 autoinstall:
   refresh-installer:
-    update: true
-    channel: latest/edge
+    update: false
   apt:
     disable_components: []
-    fallback: abort
+    fallback: offline-install
     geoip: false
     mirror-selection:
       primary:
@@ -31,10 +30,9 @@ autoinstall:
     - build-essential
   drivers:
     install: true
-  refresh-installer:
-    channel: edge
-    update: yes
   storage:
+    grub:
+      reorder_uefi: false
     layout:
       name: lvm
       sizing-policy: all
@@ -79,13 +77,12 @@ autoinstall:
   updates: security
   timezone: Asia/Shanghai
   late-commands:
-    - curtin in-target --target /target -- apt update -y
-    - curtin in-target --target /target -- apt upgrade -y
-    - curtin in-target --target /target -- apt-get dist-upgrade -y
-    - curtin in-target --target /target -- apt autoremove -y
-    - curtin in-target --target=/target -- /usr/bin/wget -P /etc/netplan/ http://172.17.80.238/ubuntu/netcfg/fts-server-netcfg.yaml
+    - curtin in-target --target /target -- sh -c "apt update -y || true"
+    - curtin in-target --target /target -- sh -c "apt upgrade -y || true"
+    - curtin in-target --target /target -- sh -c "apt-get dist-upgrade -y || true"
+    - curtin in-target --target /target -- sh -c "apt autoremove -y || true"
+    - curtin in-target --target=/target -- /usr/bin/wget -P /etc/netplan/ http://172.17.80.238/ubuntu/netcfg/fts-server-netcfg.yaml || true
     - chmod -R 600 /target/etc/netplan/
-    - curtin in-target --target=/target -- sudo usermod -p '$6$jMIpAD1dGkm6sqfJ$HF6uWZp3lbYMjyI3jWUE1j51R9sqCkX8tjrp3xut2AWs3r2Ou9JGyZu1Xr7D3VF3B4X2gYCfjQatKoxAbDGSu0' root
+    - curtin in-target --target=/target -- usermod -p '$6$jMIpAD1dGkm6sqfJ$HF6uWZp3lbYMjyI3jWUE1j51R9sqCkX8tjrp3xut2AWs3r2Ou9JGyZu1Xr7D3VF3B4X2gYCfjQatKoxAbDGSu0' root
     - curtin in-target --target=/target -- update-grub2
-    - reboot
   version: 1
